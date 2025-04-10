@@ -13,6 +13,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "./_components/ui/core/chart"
+import { getSurveys } from "./_utils/data"
+import { useEffect, useState } from "react"
+import { PostgrestError } from "@supabase/supabase-js"
+
+export const dynamic = "force-dynamic"
 
 const chartData = [
   { month: "January", desktop: 186 },
@@ -31,6 +36,18 @@ const chartConfig = {
 } satisfies ChartConfig
 
 export default function Home() {
+  const [surveys, setSurveys] = useState<any[] | PostgrestError>(null)
+
+  useEffect(() => {
+    async function fetchSurveys() {
+      const data = await getSurveys()
+      setSurveys(data)
+    }
+    fetchSurveys()
+  }, [])
+
+  console.log(surveys)
+
   return (
     <div className="grid md:grid-cols-12 gap-8 p-8 h-96">
       <Card className="col-span-3">
