@@ -1,21 +1,62 @@
-import { createClient } from "@/app/_utils/supabase/server"
+"use client"
 
-async function getSurveys() {
-  const supabase = await createClient()
+import { BarChart, CartesianGrid, XAxis, Bar } from "recharts"
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "./_components/ui/core/card"
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "./_components/ui/core/chart"
 
-  const { data, error } = await supabase.from("Survey").select("*, Answer(*)")
+const chartData = [
+  { month: "January", desktop: 186 },
+  { month: "February", desktop: 305 },
+  { month: "March", desktop: 237 },
+  { month: "April", desktop: 73 },
+  { month: "May", desktop: 209 },
+  { month: "June", desktop: 214 },
+]
 
-  if (error) {
-    return error
-  } else {
-    return data
-  }
-}
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "hsl(var(--chart-1))",
+  },
+} satisfies ChartConfig
 
-export default async function Home() {
-  const surveysData = await getSurveys()
-
-  console.log(surveysData)
-
-  return <div>aa</div>
+export default function Home() {
+  return (
+    <div className="grid md:grid-cols-12 gap-8 p-8 h-96">
+      <Card className="col-span-3">
+        <CardHeader>
+          <CardTitle>Idade</CardTitle>
+        </CardHeader>
+        <CardContent className="h-full w-full relative">
+          <ChartContainer config={chartConfig} className="h-full w-full">
+            <BarChart accessibilityLayer data={chartData}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="month"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) => value.slice(0, 3)}
+              />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
+            </BarChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
+    </div>
+  )
 }
