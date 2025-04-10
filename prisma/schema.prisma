@@ -17,7 +17,7 @@ datasource db {
 
 model Answer {
   id       Int    @id @default(autoincrement())
-  title    String
+  key      String
   value    String
   survey   Survey @relation(fields: [surveyId], references: [id])
   surveyId Int
@@ -25,15 +25,7 @@ model Answer {
 
 model Survey {
   id      Int      @id @default(autoincrement())
-  user    User     @relation(fields: [userId], references: [id])
-  userId  Int
+  name    String
+  email   String
   answers Answer[]
-}
-
-model User {
-  id       Int      @id @default(autoincrement())
-  email    String
-  name     String
-  password String?
-  surveys  Survey[]
 }
