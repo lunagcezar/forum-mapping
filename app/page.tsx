@@ -38,8 +38,6 @@ export default function Home() {
     fetchSurveys()
   }, [])
 
-  console.log(surveys)
-
   const ageChartData = getAgeChartData(surveys)
 
   return (
