@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import { Toaster } from "sonner"
+import Link from "next/link"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,6 +16,10 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body>
+        <nav className="flex gap-4 p-4">
+          <Link href="/">Início</Link>
+          <Link href="/pesquisa">Pesquisa</Link>
+        </nav>
         <div className="grid grid-flow-col min-h-screen">{children}</div>
         <Toaster />
       </body>

@@ -1,6 +1,6 @@
 "use client"
 
-import { BarChart, CartesianGrid, XAxis, Bar } from "recharts"
+import { BarChart, CartesianGrid, XAxis, Bar, YAxis } from "recharts"
 import {
   Card,
   CardHeader,
@@ -15,28 +15,20 @@ import {
 } from "./_components/ui/core/chart"
 import { getSurveys } from "./_utils/data"
 import { useEffect, useState } from "react"
-import { PostgrestError } from "@supabase/supabase-js"
+import { Survey } from "./_types/survey"
+import { getAgeChartData } from "./_utils/chart"
 
 export const dynamic = "force-dynamic"
 
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-]
-
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  age: {
+    label: "Age",
     color: "hsl(var(--chart-1))",
   },
 } satisfies ChartConfig
 
 export default function Home() {
-  const [surveys, setSurveys] = useState<any[] | PostgrestError>(null)
+  const [surveys, setSurveys] = useState<Survey[]>([])
 
   useEffect(() => {
     async function fetchSurveys() {
@@ -48,6 +40,8 @@ export default function Home() {
 
   console.log(surveys)
 
+  const ageChartData = getAgeChartData(surveys)
+
   return (
     <div className="grid md:grid-cols-12 gap-8 p-8 h-96">
       <Card className="col-span-3">
@@ -56,20 +50,19 @@ export default function Home() {
         </CardHeader>
         <CardContent className="h-full w-full relative">
           <ChartContainer config={chartConfig} className="h-full w-full">
-            <BarChart accessibilityLayer data={chartData}>
+            <BarChart accessibilityLayer data={ageChartData}>
               <CartesianGrid vertical={false} />
               <XAxis
-                dataKey="month"
-                tickLine={false}
+                dataKey="age"
+                tickLine={true}
                 tickMargin={10}
-                axisLine={false}
-                tickFormatter={(value) => value.slice(0, 3)}
+                axisLine={true}
               />
               <ChartTooltip
                 cursor={false}
                 content={<ChartTooltipContent hideLabel />}
               />
-              <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
+              <Bar dataKey="value" fill="var(--color-desktop)" radius={8} />
             </BarChart>
           </ChartContainer>
         </CardContent>
