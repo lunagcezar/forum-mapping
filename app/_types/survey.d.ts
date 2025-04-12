@@ -7,7 +7,7 @@ export type Answer = DBProperties & {
 }
 
 export type Survey = DBProperties & {
-  name: string
-  email: string
+  name?: string
+  email?: string
   Answer?: Answer[]
 }
