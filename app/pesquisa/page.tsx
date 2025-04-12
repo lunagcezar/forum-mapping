@@ -16,7 +16,6 @@ import { useForm } from "react-hook-form"
 import { Card, CardContent, CardFooter } from "../_components/ui/core/card"
 import { sendSurvey } from "./actions"
 import { toast } from "sonner"
-import { useEffect } from "react"
 
 export default function SurveyPage() {
   const formSchema = z.object({
@@ -42,8 +41,6 @@ export default function SurveyPage() {
       return toast("Erro de validação") as unknown as Promise<void>
     }
   }
-
-  useEffect(() => console.log(form.formState.isValid), [form.formState.isValid])
 
   return (
     <Form {...form}>
