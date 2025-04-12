@@ -16,10 +16,11 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Card, CardContent, CardFooter } from "../_components/ui/core/card"
 import { toast } from "sonner"
+import { requiredField } from "../_constants/messages"
 
 export default function LoginPage() {
   const formSchema = z.object({
-    email: z.string().min(1, "Campo obrigatório").email("Formato de email"),
+    email: z.string().min(1, requiredField).email("Formato de email"),
     password: z.string().min(6, "Mínimo de 6 caracteres"),
   })
 

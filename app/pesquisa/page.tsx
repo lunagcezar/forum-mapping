@@ -41,13 +41,17 @@ import {
 } from "../_components/ui/core/popover"
 import { toast } from "sonner"
 import Asterisk from "../_components/ui/core/asterisk"
+import { requiredField } from "../_constants/messages"
+import { cearaGeometry, fortalezaGeometry } from "../_constants/geometry"
 
 export default function SurveyPage() {
   const formSchema = z.object({
     name: z.string().optional(),
     email: z.string().optional(),
     portfolio: z.string().optional(),
-    race: z.string().min(1, "Campo obrigatório"),
+    race: z.string().min(1, requiredField),
+    city: z.string().min(1, requiredField),
+    neighborhood: z.string().optional(),
     age: z.coerce.number().gte(18).lte(100),
   })
 
@@ -239,6 +243,148 @@ export default function SurveyPage() {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="city"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>
+                    Em qual cidade você trabalhou nos últimos 2 anos?
+                    <Asterisk />
+                  </FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? cearaGeometry.features.find(
+                                (city) => city?.properties.name === field.value
+                              )?.properties.name
+                            : "Selecione uma cidade"}
+                          <ChevronsUpDown className="opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Selecione uma cidade..."
+                          className="h-9"
+                        />
+                        <CommandList>
+                          <CommandEmpty>Sem resultados</CommandEmpty>
+                          <CommandGroup>
+                            {cearaGeometry.features.map((city) => (
+                              <CommandItem
+                                value={city.properties.name}
+                                key={"city-" + city.properties.name}
+                                onSelect={() => {
+                                  form.setValue("city", city.properties.name)
+                                }}
+                              >
+                                {city.properties.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    city.properties.name === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/*
+
+<FormField
+              control={form.control}
+              name="neighborhood"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>
+                    Se marcou Fortaleza na questão anterior, em qual bairro você
+                    reside?
+                    <Asterisk />
+                  </FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? fortalezaGeometry.features.find(
+                                (city) => city?.properties.name === field.value
+                              )?.properties.name
+                            : "Selecione uma cidade"}
+                          <ChevronsUpDown className="opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Selecione uma cidade..."
+                          className="h-9"
+                        />
+                        <CommandList>
+                          <CommandEmpty>Sem resultados</CommandEmpty>
+                          <CommandGroup>
+                            {fortalezaGeometry.features.map((neighborhood) => (
+                              <CommandItem
+                                value={neighborhood.properties.name}
+                                key={
+                                  "neighborhood-" + neighborhood.properties.name
+                                }
+                                onSelect={() => {
+                                  form.setValue(
+                                    "neighborhood",
+                                    neighborhood.properties.name
+                                  )
+                                }}
+                              >
+                                {neighborhood.properties.name}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    neighborhood.properties.name === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+              */}
+
             <FormField
               control={form.control}
               name="age"
