@@ -265,7 +265,7 @@ export default function SurveyPage() {
                         >
                           {field.value
                             ? cearaGeometry.features.find(
-                                (city) => city?.properties.name === field.value
+                                (city) => city.properties.name === field.value
                               )?.properties.name
                             : "Selecione uma cidade"}
                           <ChevronsUpDown className="opacity-50" />
@@ -309,9 +309,8 @@ export default function SurveyPage() {
                 </FormItem>
               )}
             />
-            {/*
 
-<FormField
+            <FormField
               control={form.control}
               name="neighborhood"
               render={({ field }) => (
@@ -334,9 +333,10 @@ export default function SurveyPage() {
                         >
                           {field.value
                             ? fortalezaGeometry.features.find(
-                                (city) => city?.properties.name === field.value
-                              )?.properties.name
-                            : "Selecione uma cidade"}
+                                (neighborhood) =>
+                                  neighborhood?.properties.Nome === field.value
+                              )?.properties.Nome
+                            : "Selecione um bairro"}
                           <ChevronsUpDown className="opacity-50" />
                         </Button>
                       </FormControl>
@@ -344,7 +344,7 @@ export default function SurveyPage() {
                     <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
                       <Command>
                         <CommandInput
-                          placeholder="Selecione uma cidade..."
+                          placeholder="Selecione um bairro..."
                           className="h-9"
                         />
                         <CommandList>
@@ -352,22 +352,22 @@ export default function SurveyPage() {
                           <CommandGroup>
                             {fortalezaGeometry.features.map((neighborhood) => (
                               <CommandItem
-                                value={neighborhood.properties.name}
+                                value={neighborhood.properties.Nome}
                                 key={
-                                  "neighborhood-" + neighborhood.properties.name
+                                  "neighborhood-" + neighborhood.properties.Nome
                                 }
                                 onSelect={() => {
                                   form.setValue(
                                     "neighborhood",
-                                    neighborhood.properties.name
+                                    neighborhood.properties.Nome
                                   )
                                 }}
                               >
-                                {neighborhood.properties.name}
+                                {neighborhood.properties.Nome}
                                 <Check
                                   className={cn(
                                     "ml-auto",
-                                    neighborhood.properties.name === field.value
+                                    neighborhood.properties.Nome === field.value
                                       ? "opacity-100"
                                       : "opacity-0"
                                   )}
@@ -383,8 +383,6 @@ export default function SurveyPage() {
                 </FormItem>
               )}
             />
-              */}
-
             <FormField
               control={form.control}
               name="age"
