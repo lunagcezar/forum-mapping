@@ -38,3 +38,30 @@ export const races = [
     value: "Outros",
   },
 ] as LabelValuePair[]
+
+export const genders = [
+  {
+    label: "Mulher cis",
+    value: "Mulher cis",
+  },
+  {
+    label: "Mulher trans",
+    value: "Mulher trans",
+  },
+  {
+    label: "Homem cis",
+    value: "Homem cis",
+  },
+  {
+    label: "Homem trans",
+    value: "Homem trans",
+  },
+  {
+    label: "Não Binário",
+    value: "Não Binário",
+  },
+  {
+    label: "Outros",
+    value: "Outros",
+  },
+]

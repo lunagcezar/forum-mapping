@@ -14,7 +14,7 @@ import {
 } from "../_components/ui/core/card"
 import { sendSurvey } from "./actions"
 import { ChevronsUpDown, Check } from "lucide-react"
-import { races } from "../_constants/data"
+import { genders, races } from "../_constants/data"
 
 import { cn } from "@/lib/utils"
 import { Button } from "../_components/ui/core/button"
@@ -49,6 +49,7 @@ export default function SurveyPage() {
       name: z.string().optional(),
       email: z.string().optional(),
       portfolio: z.string().optional(),
+      gender: z.string().min(1, requiredField),
       race: z.string().min(1, requiredField),
       city: z.string().min(1, requiredField),
       neighborhood: z.string().optional(),
@@ -72,6 +73,7 @@ export default function SurveyPage() {
       name: "",
       email: "",
       portfolio: "",
+      gender: "",
       race: "",
       city: "",
       neighborhood: "",
@@ -202,6 +204,70 @@ export default function SurveyPage() {
                   <FormControl>
                     <Input id="portfolio" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>
+                    Qual é o seu gênero? <Asterisk />
+                  </FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? genders.find((race) => race.value === field.value)
+                                ?.label
+                            : "Selecione um gênero"}
+                          <ChevronsUpDown className="opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Selecione o seu gênero..."
+                          className="h-9"
+                        />
+                        <CommandList>
+                          <CommandEmpty>Sem resultados</CommandEmpty>
+                          <CommandGroup>
+                            {genders.map((gender) => (
+                              <CommandItem
+                                value={gender.label}
+                                key={gender.value}
+                                onSelect={() => {
+                                  form.setValue("gender", gender.value)
+                                }}
+                              >
+                                {gender.label}
+                                <Check
+                                  className={cn(
+                                    "ml-auto",
+                                    gender.value === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   <FormMessage />
                 </FormItem>
               )}
