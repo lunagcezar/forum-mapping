@@ -18,25 +18,25 @@ type BarChartCardProps = {
   className?: string
 }
 
-const chartConfig = {
-  age: {
-    label: "Age",
-    color: "hsl(var(--chart-1))",
-  },
-} satisfies ChartConfig
-
 export default function BarChartCard({
   title,
   chartData,
   className = "",
 }: BarChartCardProps) {
+  const chartConfig = {
+    key: {
+      label: title,
+      color: "#fefefe",
+    },
+  } satisfies ChartConfig
+
   return (
     <Card className={className}>
       <CardHeader>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
-      <CardContent className="h-full w-full relative">
-        <ChartContainer config={chartConfig} className="h-full w-full">
+      <CardContent className="h-full w-full relative flex justify-center items-center">
+        <ChartContainer config={chartConfig} className="sm:h-48 w-full">
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import { Toaster } from "sonner"
-import Link from "next/link"
+import Navbar from "./_components/ui/shared/Navbar/Navbar"
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,11 +16,10 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body>
-        <nav className="flex gap-4 p-4">
-          <Link href="/">Início</Link>
-          <Link href="/pesquisa">Pesquisa</Link>
-        </nav>
-        <div className="grid grid-flow-col min-h-screen">{children}</div>
+        <Navbar />
+        <div className="grid grid-flow-col min-h-screen px-12 py-24">
+          {children}
+        </div>
         <Toaster />
       </body>
     </html>

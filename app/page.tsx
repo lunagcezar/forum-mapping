@@ -21,12 +21,26 @@ export default function Home() {
 
   const ageChartData = getChartData(surveys, "age")
 
+  const genderChartData = getChartData(surveys, "gender")
+
+  const raceChartData = getChartData(surveys, "race")
+
   return (
-    <div className="grid md:grid-cols-12 gap-8 p-8 h-96">
+    <div className="grid sm:grid-cols-12 gap-8">
       <BarChartCard
         title={"Idade"}
         chartData={ageChartData}
-        className="col-span-3"
+        className="col-span-4 sm:h-72"
+      />
+      <BarChartCard
+        title={"Gênero"}
+        chartData={genderChartData}
+        className="col-span-4 sm:h-72"
+      />
+      <BarChartCard
+        title={"Raça"}
+        chartData={raceChartData}
+        className="col-span-4 sm:h-72"
       />
     </div>
   )
