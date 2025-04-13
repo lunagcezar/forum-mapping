@@ -79,7 +79,7 @@ export default function SurveyPage() {
     },
   })
 
-  async function onSubmit() {
+  function onSubmit() {
     return sendSurvey(form.getValues())
   }
 
