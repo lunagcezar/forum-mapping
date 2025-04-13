@@ -20,13 +20,15 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "leaflet": "^1.9.4",
     "lucide-react": "^0.487.0",
     "next": "15.3.0",
     "next-themes": "^0.4.6",
     "prisma": "^6.6.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react": "^19.0.0-rc.1",
+    "react-dom": "^19.0.0-rc.1",
     "react-hook-form": "^7.55.0",
+    "react-leaflet": "^5.0.0-rc.2",
     "recharts": "^2.15.2",
     "sonner": "^2.0.3",
     "tailwind-merge": "^3.2.0",
@@ -47,6 +49,6 @@
     "typescript": "^5"
   },
   "overrides": {
-    "react-is": "^19.1.0"
+    "react-is": "^19.0.0-rc.1"
   }
 }
