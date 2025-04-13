@@ -1,24 +1,29 @@
 import { Survey } from "../_types/survey"
 
-export function getAgeChartData(surveys: Survey[]) {
-  const ages = [] as number[]
+export function getChartData(surveys: Survey[], key: string) {
+  const data = [] as number[]
 
-  const ageChartData = [] as { age: number; value: number }[]
+  const chartData = [] as { key: string | number; value: number }[]
 
   surveys.map((a) => {
-    ages.push(Number(a.Answer?.find((b) => b.surveyId === a.id)?.value))
+    data.push(
+      Number(
+        a.Answer?.filter((b) => b.key === key)?.find((c) => c.surveyId === a.id)
+          ?.value
+      )
+    )
   })
 
-  ages.sort((a, b) => a - b)
+  data.sort((a, b) => a - b)
 
-  ages.map((a) => {
-    const ageChartDataRef = ageChartData.find((b) => b.age === a)
-    if (typeof ageChartDataRef !== "undefined") {
-      ageChartDataRef.value += 1
+  data.map((a) => {
+    const chartDataRef = chartData.find((b) => b.key === a)
+    if (typeof chartDataRef !== "undefined") {
+      chartDataRef.value += 1
     } else {
-      ageChartData.push({ age: a, value: 1 })
+      chartData.push({ key: a, value: 1 })
     }
   })
 
-  return ageChartData
+  return chartData
 }
