@@ -3,7 +3,7 @@ import { DBProperties } from "./data"
 export type Answer = DBProperties & {
   surveyId: number
   key: string
-  value: string
+  value?: string | number
 }
 
 export type Survey = DBProperties & {

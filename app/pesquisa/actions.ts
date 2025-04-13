@@ -6,13 +6,16 @@ import { redirect } from "next/navigation"
 import { createClient } from "@/app/_utils/supabase/server"
 import { Answer, Survey } from "../_types/survey"
 import { PostgrestSingleResponse } from "@supabase/supabase-js"
+import { SurveyFormData } from "../_types/form"
 
-export async function sendSurvey(formData: FormData) {
+export async function sendSurvey(data: SurveyFormData) {
   const supabase = await createClient()
 
+  const { name: formName, email: formEmail, ...formData } = data
+
   const surveyData = {
-    name: formData.get("name") as string,
-    email: formData.get("email") as string,
+    name: formName,
+    email: formEmail,
   } as Survey
 
   const sendSurvey = (await supabase
@@ -27,13 +30,17 @@ export async function sendSurvey(formData: FormData) {
     console.log(sendSurvey.data[0].id)
   }
 
-  const answersData = [
-    {
-      surveyId: sendSurvey.data[0].id,
-      key: "Idade",
-      value: formData.get("age") as string,
-    },
-  ] as Answer[]
+  const answersData = [] as Answer[]
+
+  let key: keyof typeof formData
+
+  for (key in formData) {
+    answersData.push({
+      surveyId: sendSurvey.data[0].id ?? NaN,
+      key: key,
+      value: formData[key],
+    })
+  }
 
   const sendAnswers = (await supabase
     .from("Answer")

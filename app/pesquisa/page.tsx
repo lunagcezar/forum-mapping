@@ -39,21 +39,31 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../_components/ui/core/popover"
-import { toast } from "sonner"
 import Asterisk from "../_components/ui/core/asterisk"
 import { requiredField } from "../_constants/messages"
 import { cearaGeometry, fortalezaGeometry } from "../_constants/geometry"
 
 export default function SurveyPage() {
-  const formSchema = z.object({
-    name: z.string().optional(),
-    email: z.string().optional(),
-    portfolio: z.string().optional(),
-    race: z.string().min(1, requiredField),
-    city: z.string().min(1, requiredField),
-    neighborhood: z.string().optional(),
-    age: z.coerce.number().gte(18).lte(100),
-  })
+  const formSchema = z
+    .object({
+      name: z.string().optional(),
+      email: z.string().optional(),
+      portfolio: z.string().optional(),
+      race: z.string().min(1, requiredField),
+      city: z.string().min(1, requiredField),
+      neighborhood: z.string().optional(),
+      age: z.coerce.number().gte(18).lte(100),
+    })
+    .refine(
+      (data) => {
+        if (data.city === "Fortaleza" || data.neighborhood === undefined) {
+          return false
+        } else {
+          return true
+        }
+      },
+      { message: "Campo obrigatório", path: ["neighborhood"] }
+    )
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,21 +71,24 @@ export default function SurveyPage() {
     defaultValues: {
       name: "",
       email: "",
+      portfolio: "",
+      race: "",
+      city: "",
+      neighborhood: "",
       age: 0,
     },
   })
 
-  async function formAction(formData: FormData) {
-    if (form.formState.isValid) {
-      return sendSurvey(formData)
-    } else {
-      return toast("Erro de validação") as unknown as Promise<void>
-    }
+  async function onSubmit() {
+    return sendSurvey(form.getValues())
   }
 
   return (
     <Form {...form}>
-      <form className="self-center justify-self-center w-1/2">
+      <form
+        className="self-center justify-self-center w-1/2"
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
         <Card>
           <CardHeader>
             <CardTitle>
@@ -157,6 +170,21 @@ export default function SurveyPage() {
                   </FormLabel>
                   <FormControl>
                     <Input id="email" type="email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="age"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Idade <Asterisk />
+                  </FormLabel>
+                  <FormControl>
+                    <Input id="age" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -309,7 +337,6 @@ export default function SurveyPage() {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="neighborhood"
@@ -318,7 +345,7 @@ export default function SurveyPage() {
                   <FormLabel>
                     Se marcou Fortaleza na questão anterior, em qual bairro você
                     reside?
-                    <Asterisk />
+                    {form.getValues("city") === "Fortaleza" && <Asterisk />}
                   </FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -383,26 +410,9 @@ export default function SurveyPage() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="age"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Idade</FormLabel>
-                  <FormControl>
-                    <Input id="age" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </CardContent>
           <CardFooter className="flex gap-2">
-            <Button
-              className="flex-1"
-              type="submit"
-              formAction={(e) => formAction(e)}
-            >
+            <Button className="flex-1" type="submit">
               Enviar
             </Button>
           </CardFooter>
